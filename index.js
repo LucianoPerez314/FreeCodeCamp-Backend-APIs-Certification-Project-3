@@ -62,8 +62,8 @@ const postHandler = async (req, res) => {
   // Create entry in database.
   const mongoURL = new Url({original: bodyURL.origin, short: generatedShort.short});
   //Save to database if not a duplicate.
-  await mongoURL.save((err) => {
-    if (err && err.code !== 11000) return console.error(err)
+  await mongoURL.save().catch(err => {
+    if(err.code === 11000) console.log("Duplicate Found.")
   });
   // Get short from database.
   const foundShort = await Url.findOne({original: bodyURL.origin}).exec();
